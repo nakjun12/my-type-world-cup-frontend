@@ -13,6 +13,11 @@ const nextConfig = {
       },
     ],
   },
+  compiler: {
+    removeConsole: {
+      exclude: ["error", "warn"],
+    },
+  },
   // ...(process.env.NEXT_PUBLIC_NODE_ENV === "prod" && {
   //   compiler: {
   //     removeConsole: {
@@ -22,12 +27,12 @@ const nextConfig = {
   // }),
 };
 
-if (process.env.NEXT_PUBLIC_NODE_ENV === "prod") {
-  nextConfig.compiler = {
-    removeConsole: {
-      exclude: ["error", "warn"],
-    },
-  };
-}
+// if (process.env.NEXT_PUBLIC_NODE_ENV === "prod") {
+//   nextConfig.compiler = {
+//     removeConsole: {
+//       exclude: ["error", "warn"],
+//     },
+//   };
+// }
 
 module.exports = nextConfig;
