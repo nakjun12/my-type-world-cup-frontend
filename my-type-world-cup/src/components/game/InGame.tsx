@@ -1,7 +1,6 @@
 import { rank_result_fetch } from "@/api/post_rank";
 import type { Contestant, Round, result_data } from "@/type/Types";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import {
 	Dispatch,
 	MutableRefObject,
@@ -16,9 +15,14 @@ type Props = {
 	setIsModal: Dispatch<SetStateAction<[boolean, Round]>>;
 	winnerRef: MutableRefObject<Contestant[]>;
 	matchRef: MutableRefObject<Contestant[]>;
-	isCheck: [boolean, number];
-	setIsCheck: Dispatch<SetStateAction<[boolean, number]>>;
+
 	title: string;
+	animationON: boolean;
+	setAnimationON: Dispatch<SetStateAction<boolean>>;
+	pickCandidateNum: number;
+	setPickCandidateNum: Dispatch<SetStateAction<number>>;
+	startON: boolean;
+	setStartON: Dispatch<SetStateAction<boolean>>;
 };
 
 export default function InGame({
@@ -28,21 +32,27 @@ export default function InGame({
 	setIsModal,
 	winnerRef,
 	matchRef,
-	isCheck,
-	setIsCheck,
+
+	animationON,
+	setAnimationON,
+	setStartON,
+	startON,
+	setPickCandidateNum,
+	pickCandidateNum,
 	title
 }: Props) {
 	const isResult = useRef<result_data[]>([]);
 	const [count, setCount] = useState<number>(1);
 	const isButtonDisabledRef = useRef(false);
-	const router = useRouter();
+
 	const handleClick = async (num: number) => {
 		if (isButtonDisabledRef.current) {
 			return;
 		}
-
+		setAnimationON(false);
 		isButtonDisabledRef.current = true; // 버튼 비활성화
-		setIsCheck([false, num]); //이펙트 주고 뽑힌 사람 알려줌
+		setPickCandidateNum(num);
+
 		// 패자만 모와서 저장?
 		//패자는 무조건 n경기당 n-1승을함
 		//최종 승자는 마지막에 n경기당 n승임
@@ -83,7 +93,8 @@ export default function InGame({
 
 			await rank_result_fetch(isResult.current);
 
-			setIsCheck([true, 4]); //원위치
+			setStartON(false);
+			setAnimationON(true);
 			return;
 		} else if (matchRef.current.length === 0) {
 			//다음 라운드로 넘어가기
@@ -94,14 +105,15 @@ export default function InGame({
 		}
 
 		setTimeout(() => {
-			setIsCheck([true, 3]); //원위치
+			setAnimationON(true);
+			// setIsCheck([true, 3]); //원위치.
+			setStartON(true);
 			randomContestant(); //다시뽑기
 			isButtonDisabledRef.current = false; // 버튼 활성화
 		}, 2200);
 	};
 
-	if (isCheck[1] === 4) {
-		console.log(isCheck, "끝");
+	if (!startON) {
 		return <></>;
 	}
 
@@ -114,16 +126,16 @@ export default function InGame({
 				className='flex justify-center pt-2 sm:mt-4 mt-6'
 				onClick={() => handleClick(0)}
 				style={{
-					transform: isCheck[0]
+					transform: animationON
 						? "translateY(0%)"
-						: isCheck[1] === 0
+						: pickCandidateNum === 0
 						? "translateY(35%)"
 						: " translateX(150%)",
 					transition:
-						!isCheck[0] && isCheck[1] === 0
+						!animationON && pickCandidateNum === 0
 							? "all 1s ease-in-out"
 							: "all 0s",
-					opacity: !isCheck[0] && isCheck[1] === 1 ? "0" : "1"
+					opacity: !animationON && pickCandidateNum === 1 ? "0" : "1"
 				}}>
 				<Image
 					src={twoPeople[0].image}
@@ -146,7 +158,7 @@ export default function InGame({
 				className='absolute top-[53%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-20'
 				style={{
 					transition: "transform 1s ease-in-out",
-					visibility: !isCheck[0] ? "hidden" : "visible"
+					visibility: !animationON ? "hidden" : "visible"
 				}}>
 				<Image
 					src='/icon/vs.svg'
@@ -160,17 +172,19 @@ export default function InGame({
 				className='flex justify-center '
 				onClick={() => handleClick(1)}
 				style={{
-					transform: isCheck[0]
+					transform: animationON
 						? "translateY(0%)"
-						: isCheck[1] === 1
+						: pickCandidateNum === 1
 						? "translateY(-60%)"
 						: "translateX(200%)",
 					transition:
-						!isCheck[0] && isCheck[1] === 1
+						!animationON && pickCandidateNum === 1
 							? "transform 1s ease-in-out"
 							: "",
 					visibility:
-						!isCheck[0] && isCheck[1] === 0 ? "hidden" : "visible"
+						!animationON && pickCandidateNum === 0
+							? "hidden"
+							: "visible"
 				}}>
 				<Image
 					src={twoPeople[1].image}

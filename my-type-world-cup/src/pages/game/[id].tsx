@@ -1,12 +1,12 @@
 import InGame from "@/components/game/InGame";
-import Modal from "@/components/game/InGameModal";
+import InGameModal from "@/components/game/InGameModal";
 import Result from "@/components/game/Result";
 import { getInitialRound } from "@/lib/Helper";
 import { BACK_URL } from "@/lib/config";
 import type { Round } from "@/type/Types";
 import { Contestant, IngameModalData } from "@/type/Types";
 import { GetServerSideProps } from "next";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 // 수적으면 제한되는 로직 생성해야함
 const WorldCup = ({ data }: { data: IngameModalData }) => {
@@ -15,53 +15,12 @@ const WorldCup = ({ data }: { data: IngameModalData }) => {
 		true,
 		init
 	]);
-	const [round, setRound] = useState<Number>(0);
-	const [isCheck, setIsCheck] = useState<[boolean, number]>([
-		true,
-		3
-	]); //3은 초기화//4는 끝
-	// const [contestants, setContestants] =
-	//   useState<Contestant[]>(initialContestants);
+	const [startON, setStartON] = useState<boolean>(true);
+	const [pickCandidateNum, setPickCandidateNum] = useState<number>(3);
+	const [animationON, setAnmationON] = useState<boolean>(true);
 	const matchRef = useRef<Contestant[]>([]); //게임 캐릭터 넣기
 	const [twoPeople, setTwoPeople] = useState<Contestant[]>([]);
-	// const [winner, setWinner] = useState<Contestant[]>([]);
 	const winnerRef = useRef<Contestant[]>([]);
-
-	useEffect(() => {
-		setRound(isModal[1]);
-	}, [isModal]);
-
-	const fetchContestants = async (
-		password: string | null = null,
-		teamCount: number = 16
-	) => {
-		const url = `${BACK_URL}/worldcups/${data.id}/candidates/random?teamCount=${teamCount}`;
-		const bodyData = {
-			worldCupId: data.id,
-			password: password
-		};
-		console.log(bodyData, "데이터");
-		const options: RequestInit = {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json"
-			},
-			body: JSON.stringify(bodyData)
-		};
-		try {
-			const response = await fetch(url, options);
-			if (!response.ok) {
-				throw new Error("Failed to fetch contestants");
-			}
-			const data = await response.json();
-			matchRef.current = data;
-			console.log(data, "안 데이터");
-			return true;
-		} catch (error) {
-			console.error(error);
-			return false;
-		}
-	};
 
 	const randomIndex = (el: number, length: number) => {
 		let num = Math.floor(Math.random() * length);
@@ -73,7 +32,6 @@ const WorldCup = ({ data }: { data: IngameModalData }) => {
 	// 겹치지 않는 2명을 계속해서 뽑는 법
 	// 새로운 배열로 업데이트가 되지않음
 	const randomContestant = () => {
-		// console.log(winnerRef.current, "안 위너", matchRef.current, "안 매치");
 		const randomIndex1 = Math.floor(
 			Math.random() * matchRef.current.length
 		);
@@ -96,18 +54,11 @@ const WorldCup = ({ data }: { data: IngameModalData }) => {
 			//2명을 빼줌
 			(el) => el !== randomContestant1 && el !== randomContestant2
 		);
-		// console.log(matchRef.current, "안후 매치");
-		// setContestants((el: Contestant[]) => {
-		//   return el.filter(
-		//     (el) => el !== randomContestant1 && el !== randomContestant2
-		//   );
-		// });
 	};
 
-	// console.log(isCheck, "안 엔드");
 	return (
 		<div className='h-auto shadow-lg'>
-			{isCheck[1] !== 4 && (
+			{startON && (
 				<div className='relative h-screen shadow-lg z-50'>
 					<div className='bg-sweetBlack w-full h-full overflow-hidden'>
 						{!isModal[0] && (
@@ -117,10 +68,14 @@ const WorldCup = ({ data }: { data: IngameModalData }) => {
 								randomContestant={() => randomContestant()}
 								winnerRef={winnerRef}
 								matchRef={matchRef}
-								isCheck={isCheck}
-								setIsCheck={setIsCheck}
 								setIsModal={setIsModal}
 								title={data.title}
+								setAnimationON={setAnmationON}
+								animationON={animationON}
+								setStartON={setStartON}
+								startON={startON}
+								setPickCandidateNum={setPickCandidateNum}
+								pickCandidateNum={pickCandidateNum}
 							/>
 						)}
 					</div>
@@ -137,18 +92,18 @@ const WorldCup = ({ data }: { data: IngameModalData }) => {
 						}}
 					/>
 					{isModal[0] && (
-						<Modal
-							fetchContestants={fetchContestants}
+						<InGameModal
 							data={data}
 							init={init}
 							isModal={isModal}
 							setIsModal={setIsModal}
+							matchRef={matchRef}
 							randomContestant={() => randomContestant()}
 						/>
 					)}
 				</div>
 			)}
-			{isCheck[1] === 4 && (
+			{!startON && (
 				<>
 					<Result
 						winnerRef={winnerRef}
