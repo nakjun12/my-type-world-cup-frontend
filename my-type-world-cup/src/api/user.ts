@@ -10,10 +10,14 @@ import type {
 import { MutableRefObject } from "react";
 import { BACK_URL } from "../lib/config";
 
+const MEMBERS_URL = `${BACK_URL}/members`;
+const WORLDCUPS_URL = `${BACK_URL}/worldcups`;
+const CANDIDATES_URL = `${BACK_URL}/candidates`;
+
 // 사용자 데이터를 가져오는 함수
 export async function fetchUserData(accessToken: string): Promise<User> {
 	try {
-		const response = await fetch(`${BACK_URL}/members`, {
+		const response = await fetch(MEMBERS_URL, {
 			headers: {
 				Authorization: `Bearer ${accessToken}`
 			}
@@ -42,7 +46,7 @@ export async function patchMember(
 	nickname: string
 ): Promise<User> {
 	try {
-		const response = await fetch(`${BACK_URL}/members`, {
+		const response = await fetch(MEMBERS_URL, {
 			method: "PATCH",
 			headers: {
 				"Content-Type": "application/json",
@@ -75,7 +79,7 @@ export async function post_worldcup(
 	worldCup: Post_req
 ): Promise<Post_res> {
 	try {
-		const response = await fetch(`${BACK_URL}/worldcups`, {
+		const response = await fetch(WORLDCUPS_URL, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -109,7 +113,7 @@ export async function patch_worldcup(
 	id: number
 ): Promise<Post_res> {
 	try {
-		const response = await fetch(`${BACK_URL}/worldcups/${id}`, {
+		const response = await fetch(`${WORLDCUPS_URL}/${id}`, {
 			method: "PATCH",
 			headers: {
 				"Content-Type": "application/json",
@@ -142,7 +146,7 @@ export async function delete_worldcup(
 	id: number
 ): Promise<Response> {
 	try {
-		const response = await fetch(`${BACK_URL}/worldcups/${id}`, {
+		const response = await fetch(`${WORLDCUPS_URL}/${id}`, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -176,7 +180,7 @@ export async function post_candidates(
 		if (candidates.id) {
 			return await patch_candidates(accessToken, candidates);
 		} else {
-			const response = await fetch(`${BACK_URL}/candidates`, {
+			const response = await fetch(CANDIDATES_URL, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -210,7 +214,7 @@ export async function patch_candidates(
 	candidates: Save_data
 ): Promise<Save_data> {
 	try {
-		const response = await fetch(`${BACK_URL}/candidates/${candidates.id}`, {
+		const response = await fetch(`${CANDIDATES_URL}/${candidates.id}`, {
 			method: "PATCH",
 			headers: {
 				"Content-Type": "application/json",
@@ -244,7 +248,7 @@ export async function delete_candidates(
 	id: number
 ): Promise<Response> {
 	try {
-		const response = await fetch(`${BACK_URL}/candidates/${id}`, {
+		const response = await fetch(`${CANDIDATES_URL}/${id}`, {
 			method: "DELETE",
 			headers: {
 				"Content-Type": "application/json",
@@ -302,7 +306,7 @@ export async function get_detail(
 	accessToken: string
 ): Promise<Post_res> {
 	try {
-		const response = await fetch(`${BACK_URL}/worldcups/${id}/details`, {
+		const response = await fetch(`${WORLDCUPS_URL}/${id}/details`, {
 			headers: {
 				Authorization: `Bearer ${accessToken}`
 			}
@@ -364,8 +368,8 @@ export const fetchContestants = async (
 	teamCount: number = 16,
 	id: number,
 	matchRef: MutableRefObject<Contestant[]>
-) => {
-	const url = `${BACK_URL}/worldcups/${id}/candidates/random?teamCount=${teamCount}`;
+): Promise<boolean> => {
+	const url = `${WORLDCUPS_URL}/${id}/candidates/random?teamCount=${teamCount}`;
 	const bodyData = {
 		worldCupId: id,
 		password: password
@@ -397,7 +401,7 @@ export const fetchContestants = async (
 export const rank_result_fetch = async (
 	args: result_data[]
 ): Promise<boolean> => {
-	const loginRes = await fetch(`${BACK_URL}/candidates`, {
+	const loginRes = await fetch(CANDIDATES_URL, {
 		method: "PATCH",
 		headers: {
 			"Content-Type": "application/json"
