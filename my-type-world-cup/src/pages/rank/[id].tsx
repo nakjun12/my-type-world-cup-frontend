@@ -1,6 +1,5 @@
 import GameSet from "@/components/all/GameSet";
 import Table from "@/components/rank/Table";
-import { rank_Data } from "@/type/Types";
 import { GetServerSideProps } from "next";
 
 export default function index({
@@ -8,14 +7,14 @@ export default function index({
 }: {
 	worldcupId: number;
 }) {
-	const rankData: rank_Data = {
-		worldCupId: worldcupId,
-		password: null
-	};
+	// const rankData: rank_Data = {
+	// 	worldCupId: worldcupId,
+	// 	password: null
+	// };  렌더링 고려하여 객체에서 원시값으로 변경
 
 	return (
-		<div className='h-auto shadow-lg '>
-			<Table rankData={rankData} />
+		<div className="h-auto shadow-lg ">
+			<Table worldcupId={worldcupId} />
 			<GameSet id={worldcupId} />
 		</div>
 	);
