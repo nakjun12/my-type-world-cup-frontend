@@ -321,7 +321,6 @@ export default function ImageEditor({
 						style={{
 							transform: `scale(${scale}) rotate(${rotate}deg)`
 						}}
-						priority
 						height={500}
 						onLoad={onImageLoad}
 					/>
