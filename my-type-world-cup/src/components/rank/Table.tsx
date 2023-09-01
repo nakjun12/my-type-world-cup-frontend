@@ -1,7 +1,7 @@
-import { rank_res_data_dummy } from "@/lib/Dummy";
+import { Rank_res_data_dummy } from "@/lib/Dummy";
 import { useHandleSearchState } from "@/lib/hooks/useHandleSearchState";
-import useTableStateWithSWRWithSWR from "@/lib/hooks/useTableStateWithSWR";
-import { rank_res_data } from "@/type/Types";
+import useTableStateWithSWR from "@/lib/hooks/useTableStateWithSWR";
+import { Rank_res_data } from "@/type/Types";
 import Image from "next/image";
 import { useEffect } from "react";
 import ZoomedImage from "../all/ZoomImage";
@@ -49,14 +49,14 @@ function Table({ worldcupId }: Props) {
     sort,
     setSort,
     data,  // SWR로 불러온 데이터
-  } = useTableStateWithSWRWithSWR(worldcupId);
+  } = useTableStateWithSWR(worldcupId);
   
 	useEffect(() => {
 		setCurrentPage(1);
 	}, [pageSize]);
 
 
-	const rankMember: rank_res_data[] = data ? data!.data : rank_res_data_dummy;
+	const rankMember: Rank_res_data[] = data ? data!.data : Rank_res_data_dummy;
 	const totalPage: number = data ? data!.pageInfo.totalPages : 1;
 
 const handleSearch = useHandleSearchState({searchText, setSearch})
@@ -162,7 +162,7 @@ const handleSearch = useHandleSearchState({searchText, setSearch})
 					</tr>
 				</thead>
 				<tbody>
-					{rankMember.map((rank: rank_res_data, i: number) => (
+					{rankMember.map((rank: Rank_res_data, i: number) => (
 						<tr className="border-hr border" key={rank.id}>
 							<td className="text-center text-gray">
 								{i + 1 + (currentPage - 1) * pageSize}

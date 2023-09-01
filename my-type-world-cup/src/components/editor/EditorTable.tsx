@@ -3,7 +3,7 @@ import { delete_candidates } from "@/api/user";
 import { fetcherPost } from "@/api/swr_fetch";
 import { BACK_URL } from "@/lib/config";
 import { useHandleSearchState } from "@/lib/hooks/useHandleSearchState";
-import { rank_Data, rank_res, rank_res_data } from "@/type/Types";
+import { Rank_Data, Rank_res, Rank_res_data } from "@/type/Types";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
@@ -11,7 +11,7 @@ import TablePagiNation from "../rank/TablePagiNation";
 import TrComponent from "./TrComponent";
 
 type Props = {
-	rankData: rank_Data;
+	rankData: Rank_Data;
 	accessToken: string | null;
 	setSaveList: React.Dispatch<React.SetStateAction<number>>;
 	setIsMake: React.Dispatch<React.SetStateAction<boolean>>;
@@ -43,7 +43,7 @@ function EditorTable({
 	const [search, setSearch] = useState(""); //검색 트리거
 	const [pageSize, setPageSize] = useState(5);
 	const [sort, setSort] = useState("finalWinCount");
-	const { data, error, isLoading, mutate } = useSWR<rank_res>(
+	const { data, error, isLoading, mutate } = useSWR<Rank_res>(
 		`${BACK_URL}/worldcups/${rankData.worldCupId}/candidates?sort=${sort}&direction=DESC&size=${pageSize}&page=${currentPage}${search}`,
 		(url) => fetcherPost(url, { password: rankData.password })
 	);
@@ -60,7 +60,7 @@ const handleSearch = useHandleSearchState({searchText, setSearch})
 
 	if (error) return <div>failed to load</div>;
 	if (isLoading) return <div>loading...</div>;
-	const rankMember: rank_res_data[] = data!.data;
+	const rankMember: Rank_res_data[] = data!.data;
 	const totalPage: number = data!.pageInfo.totalPages;
 
 
@@ -127,7 +127,7 @@ const handleSearch = useHandleSearchState({searchText, setSearch})
 					</tr>
 				</thead>
 				<tbody>
-					{rankMember.map((rank: rank_res_data, i: number) => (
+					{rankMember.map((rank: Rank_res_data, i: number) => (
 						<TrComponent
 							key={rank.id}
 							rank={rank}

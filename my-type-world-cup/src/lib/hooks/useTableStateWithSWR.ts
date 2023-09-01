@@ -1,12 +1,12 @@
 import { fetcherPost } from "@/api/swr_fetch";
-import { rank_res } from "@/type/Types";
+import { Rank_res } from "@/type/Types";
 import { useState } from "react";
 import useSWR from "swr";
 import { BACK_URL } from "../config";
 
 
 
-const useTableStateWithSWRWithSWR = (worldcupId: number ) => {
+const useTableStateWithSWR = (worldcupId: number ) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [zoomed, setZoomed] = useState<boolean>(false);
   const [image, setImage] = useState<string>("");
@@ -15,7 +15,7 @@ const useTableStateWithSWRWithSWR = (worldcupId: number ) => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [sort, setSort] = useState<string>("finalWinCount");
 
- const { data } = useSWR<rank_res>(
+ const { data } = useSWR<Rank_res>(
     `${BACK_URL}/worldcups/${worldcupId}/candidates?sort=${sort}&direction=DESC&size=${pageSize}&page=${currentPage}${search}`,
     (url) => fetcherPost(url, { password: null })
   );
@@ -40,4 +40,4 @@ const useTableStateWithSWRWithSWR = (worldcupId: number ) => {
   };
 };
 
-export default useTableStateWithSWRWithSWR
+export default useTableStateWithSWR

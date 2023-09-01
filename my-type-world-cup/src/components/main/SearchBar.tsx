@@ -1,4 +1,3 @@
-//search bar component for the app
 
 import { useHandleSearchState } from "@/lib/hooks/useHandleSearchState";
 import Image from "next/image";
