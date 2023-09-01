@@ -1,6 +1,6 @@
 import { post_candidates } from "@/api/user";
 import { blobToServer } from "@/lib/editor/base64";
-import type { Save_data, imgbb_result } from "@/type/Types";
+import type { Imgbb_result, Save_data } from "@/type/Types";
 import Image from "next/image";
 import React, { useEffect, useRef, useState } from "react";
 import ReactCrop, {
@@ -131,7 +131,7 @@ export default function ImageEditor({
 			//     console.error("Error fetching image:", error);
 			//   });
 
-			const response: imgbb_result = await blobToServer(image);
+			const response: Imgbb_result = await blobToServer(image);
 			const data: Save_data = {
 				name: nameRef.current?.value || "익명",
 				image: response.data.image.url,

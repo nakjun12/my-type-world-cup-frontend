@@ -185,8 +185,7 @@ export type {
   Comment_list,
   Comment_list_data,
   Comment_list_pageInfo,
-  Contestant,
-  IngameModalData,
+  Contestant, Imgbb_result, IngameModalData,
   MainWorldcup,
   PageInfo,
   Post_req,
@@ -195,7 +194,6 @@ export type {
   Rank_res_pageInfo, Result_data, Round,
   Save_data,
   Search_Image,
-  WorldcupsResponse,
-  Imgbb_result
+  WorldcupsResponse
 };
 
