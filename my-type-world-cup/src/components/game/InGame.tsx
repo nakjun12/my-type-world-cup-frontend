@@ -2,11 +2,11 @@ import { Rank_result_fetch } from "@/api/user";
 import type { Contestant, Result_data, Round } from "@/type/Types";
 import Image from "next/image";
 import {
-    Dispatch,
-    MutableRefObject,
-    SetStateAction,
-    useRef,
-    useState
+	Dispatch,
+	MutableRefObject,
+	SetStateAction,
+	useRef,
+	useState
 } from "react";
 type Props = {
 	isModal: [boolean, Round];

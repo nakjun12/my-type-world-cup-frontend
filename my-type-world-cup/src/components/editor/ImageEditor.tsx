@@ -228,68 +228,68 @@ export default function ImageEditor({
 	);
 
 	return (
-		<div className='mt-4 mb-4'>
+		<div className="mt-4 mb-4">
 			{!!imgSrc ? (
-				<div className='mt-4 flex flex-row text-gray' ref={scrollRef}>
-					<div className='flex h-8 mr-4 items-center mb-2'>
-						<label htmlFor='scale-input' className='w-16'>
+				<div className="mt-4 flex flex-row text-gray" ref={scrollRef}>
+					<div className="flex h-8 mr-4 items-center mb-2">
+						<label htmlFor="scale-input" className="w-16">
 							Scale
 						</label>
 						<button
-							type='button'
-							className='input-button'
+							type="button"
+							className="input-button"
 							onClick={() => setScale(scale + 0.1)}
 							disabled={!imgSrc}>
 							<Image
-								src='/icon/grayPlus.svg'
-								alt='plus'
-								className='cursor-pointer'
+								src="/icon/grayPlus.svg"
+								alt="plus"
+								className="cursor-pointer"
 								width={20}
 								height={18}
 							/>
 						</button>
 						<button
-							type='button'
-							className='input-button ml-2'
+							type="button"
+							className="input-button ml-2"
 							onClick={() => setScale(scale - 0.1)}
 							disabled={!imgSrc}>
 							<Image
-								src='/icon/grayMinus.svg'
-								alt='minus'
-								className='cursor-pointer'
+								src="/icon/grayMinus.svg"
+								alt="minus"
+								className="cursor-pointer"
 								width={20}
 								height={18}
 							/>
 						</button>
 					</div>
 
-					<div className='flex h-8 items-center mb-2'>
-						<label htmlFor='rotate-input' className='w-16'>
+					<div className="flex h-8 items-center mb-2">
+						<label htmlFor="rotate-input" className="w-16">
 							Rotate
 						</label>
 
 						<button
-							type='button'
-							className='input-button ml-2'
+							type="button"
+							className="input-button ml-2"
 							onClick={() => setRotate(rotate + 10)}
 							disabled={!imgSrc}>
 							<Image
-								src='/icon/grayPlus.svg'
-								alt='plus'
-								className='cursor-pointer'
+								src="/icon/grayPlus.svg"
+								alt="plus"
+								className="cursor-pointer"
 								width={20}
 								height={18}
 							/>
 						</button>
 						<button
-							type='button'
-							className='input-button ml-2'
+							type="button"
+							className="input-button ml-2"
 							onClick={() => setRotate(rotate - 10)}
 							disabled={!imgSrc}>
 							<Image
-								src='/icon/grayMinus.svg'
-								alt='minus'
-								className='cursor-pointer'
+								src="/icon/grayMinus.svg"
+								alt="minus"
+								className="cursor-pointer"
 								width={20}
 								height={18}
 							/>
@@ -297,10 +297,9 @@ export default function ImageEditor({
 					</div>
 				</div>
 			) : (
-				<h2 className='h-64 flex justify-center items-center'>
-					<span className='text-warning'> 로컬 파일 </span> &nbsp;
-					혹은 &nbsp;
-					<span className='text-warning'>검색</span>을 통해 이미지를
+				<h2 className="h-64 flex justify-center items-center">
+					<span className="text-warning"> 로컬 파일 </span> &nbsp; 혹은 &nbsp;
+					<span className="text-warning">검색</span>을 통해 이미지를
 					등록해주세요!
 				</h2>
 			)}
@@ -315,7 +314,7 @@ export default function ImageEditor({
 					aspect={aspect}>
 					<Image
 						ref={imgRef}
-						alt='Crop me'
+						alt="Crop me"
 						src={imgSrc}
 						width={500}
 						style={{
@@ -328,7 +327,7 @@ export default function ImageEditor({
 			)}
 			{!!completedCrop && !!imgSrc && (
 				<>
-					<div className=''>
+					<div className="">
 						<canvas
 							ref={previewCanvasRef}
 							style={{
@@ -341,15 +340,15 @@ export default function ImageEditor({
 						/>
 					</div>
 					<div>
-						<h3 className='text-xl my-2'>이름 입력하기</h3>
+						<h3 className="text-xl my-2">이름 입력하기</h3>
 						<input
-							type='text'
+							type="text"
 							ref={nameRef}
-							className='w-full py-2 px-4 border border-gray rounded-md focus:outline-none focus:ring-2'
+							className="w-full py-2 px-4 border border-gray rounded-md focus:outline-none focus:ring-2"
 						/>
 						<button
 							onClick={onDownloadCropClick}
-							className='bg-main rounded-md hover:scale-110 text-white w-full h-12 mt-4 mb-2'>
+							className="bg-main rounded-md hover:scale-110 text-white w-full h-12 mt-4 mb-2">
 							저장하기
 						</button>
 						<a
@@ -367,7 +366,7 @@ export default function ImageEditor({
 			)}
 
 			<BigModal
-				message='이미지를 선택하시겠습니까?'
+				message="이미지를 선택하시겠습니까?"
 				isCopied={modal}
 				setIsCopied={setModal}
 				setLoading={setLoading}
