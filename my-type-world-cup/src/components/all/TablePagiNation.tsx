@@ -1,5 +1,5 @@
 import { calculatePageRange } from "@/lib/Helper";
-import NavigationButton from "./NavigationButton";
+import NavigationButton from "../rank/NavigationButton";
 interface PaginationProps {
 	currentPage: number;
 	totalPages: number;
