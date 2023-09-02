@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import loadingGif from "../../../public/icon/loading.gif";
 import EventModal from "../all/EventModal";
 import ZoomedImage from "../all/ZoomImage";
+
 type Props = {
 	rank: Rank_res_data;
 	i: number;
@@ -16,9 +17,9 @@ type Props = {
 	setCandidateId: React.Dispatch<React.SetStateAction<number>>;
 	accessToken: string | null;
 };
-type DeleteHandler = (id: number) => void;
+
 type Handler = () => void;
-export default function TrComponent({
+export default function TrcomponentWithEditor({
 	rank,
 	i,
 	currentPage,

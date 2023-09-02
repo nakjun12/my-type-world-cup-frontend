@@ -367,7 +367,7 @@ export async function get_detail(
 }
 
 // 댓글을 생성하는 함수
-export async function post_comments(
+export async function post_comment(
 	comment: { content: string; worldCupId: number; winner?: string },
 	accessToken?: string | null,
 	retryCount: number = 0
@@ -383,7 +383,7 @@ export async function post_comments(
 			},
 			body: JSON.stringify(comment)
 		});
-		console.log(response);
+
 		if (response.status === 401) {
 			// 토큰이 만료되었을 때
 			if (retryCount >= 3) {
@@ -391,13 +391,79 @@ export async function post_comments(
 			}
 			const refreshedToken = await get_refresh(); // refresh 토큰 요청
 			// refresh 토큰을 사용하여 다시 요청
-			return post_comments(comment, refreshedToken.data, retryCount + 1);
-		} else if (!response.ok) {
-			throw response.status;
+			return post_comment(comment, refreshedToken.data, retryCount + 1);
 		}
 
 		const data = await response.json();
 		return data;
+	} catch (error) {
+		console.log(error);
+		throw error;
+	}
+}
+
+// 댓글을 좋아요 버튼
+export async function likes_comment(
+	id: number,
+	accessToken?: string | null,
+	retryCount: number = 0
+): Promise<Response> {
+	try {
+		const response = await fetch(`${BACK_URL}/comments/${id}/likes`, {
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				...(accessToken && { Authorization: `Bearer ${accessToken}` })
+			},
+			body: JSON.stringify({ commentId: id })
+		});
+
+		if (response.status === 401) {
+			// 토큰이 만료되었을 때
+			if (retryCount >= 3) {
+				throw new Error("토큰을 갱신할 수 없습니다.");
+			}
+			const refreshedToken = await get_refresh(); // refresh 토큰 요청
+			// refresh 토큰을 사용하여 다시 요청
+			return likes_comment(id, refreshedToken.data, retryCount + 1);
+		} else if (!response.ok) {
+			throw response.status;
+		}
+
+		return response;
+	} catch (error) {
+		console.log(error);
+		throw error;
+	}
+}
+
+export async function cancle_like_comment(
+	id: number,
+	accessToken?: string | null,
+	retryCount: number = 0
+): Promise<Response> {
+	try {
+		const response = await fetch(`${BACK_URL}/comments/${id}/likes`, {
+			method: "DELETE",
+			headers: {
+				"Content-Type": "application/json",
+				...(accessToken && { Authorization: `Bearer ${accessToken}` })
+			}
+		});
+
+		if (response.status === 401) {
+			// 토큰이 만료되었을 때
+			if (retryCount >= 3) {
+				throw new Error("토큰을 갱신할 수 없습니다.");
+			}
+			const refreshedToken = await get_refresh(); // refresh 토큰 요청
+			// refresh 토큰을 사용하여 다시 요청
+			return likes_comment(id, refreshedToken.data, retryCount + 1);
+		} else if (!response.ok) {
+			throw response.status;
+		}
+
+		return response;
 	} catch (error) {
 		console.log(error);
 		throw error;
