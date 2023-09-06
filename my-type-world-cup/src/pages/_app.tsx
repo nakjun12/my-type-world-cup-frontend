@@ -1,13 +1,12 @@
 import MetaTags from "@/components/MetaTag";
 import Header from "@/components/all/Header";
+import { usePageView } from "@/lib/hooks/usePageview";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import Script from "next/script";
 import { RecoilRoot } from "recoil";
 import { SWRConfig } from "swr";
-import * as gtag from "../lib/gtag";
 
 const swrConfig = {
 	revalidateOnFocus: false,
@@ -15,16 +14,7 @@ const swrConfig = {
 };
 
 function App({ Component, pageProps }: AppProps) {
-	const router = useRouter();
-	useEffect(() => {
-		const handleRouteChange = (url: URL) => {
-			gtag.pageview(url);
-		};
-		router.events.on("routeChangeComplete", handleRouteChange);
-		return () => {
-			router.events.off("routeChangeComplete", handleRouteChange);
-		};
-	}, [router.events]);
+	usePageView();
 	return (
 		<>
 			<div className="bg-hover flex justify-center items-center mt-[-1px] w-auto overflow-hidden">
@@ -33,10 +23,6 @@ function App({ Component, pageProps }: AppProps) {
 					<link rel="icon" href="/icon/trophy.svg" />
 					<link rel="mask-icon" href="/icon/trophy.svg" color="#000000" />
 					<MetaTags />
-					<script
-						async
-						src={`https://www.googletagmanager.com/gtag/js?id=G-2MHY2KXJCP`}
-					/>
 					<script
 						dangerouslySetInnerHTML={{
 							__html: `
@@ -49,7 +35,10 @@ function App({ Component, pageProps }: AppProps) {
 						}}
 					/>
 				</Head>
-
+				<Script
+					async
+					src={`https://www.googletagmanager.com/gtag/js?id=G-2MHY2KXJCP`}
+				/>
 				<div className="my-auto h-0 lg:h-auto mt-40 mr-4 hidden lg:block">
 					<p className="mt-4 text-2xl text-left">나의 마음을 확인하세요</p>
 					<h2 className="text-left text-5xl font-bold text-[#117FFA]">
