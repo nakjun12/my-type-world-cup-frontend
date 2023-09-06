@@ -3,10 +3,10 @@ import Header from "@/components/all/Header";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import Script from "next/script";
 import { RecoilRoot } from "recoil";
 import { SWRConfig } from "swr";
-import GoogleAnalytics from "../lib/GoogleAnalytics";
-
+import * as gtag from "../lib/gtag";
 const swrConfig = {
 	revalidateOnFocus: false,
 	revalidateOnReconnect: false
@@ -15,7 +15,24 @@ const swrConfig = {
 function App({ Component, pageProps }: AppProps) {
 	return (
 		<>
-			<GoogleAnalytics />
+			<Script
+				strategy="afterInteractive"
+				src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+			/>
+			<Script
+				id="gtag-init"
+				strategy="afterInteractive"
+				dangerouslySetInnerHTML={{
+					__html: `
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gtag.GA_TRACKING_ID}', {
+                  page_path: window.location.pathname,
+                });
+              `
+				}}
+			/>
 			<div className="bg-hover flex justify-center items-center mt-[-1px] w-auto overflow-hidden">
 				<Head>
 					<title>이상형 월드컵</title>
