@@ -1,40 +1,26 @@
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID || "";
+export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageview = (url: URL) => {
-	window.gtag("config", GA_TRACKING_ID, {
+	if (typeof window.gtag == "undefined") return;
+
+	window.gtag("config", GA_TRACKING_ID as string, {
 		page_path: url
 	});
 };
 
+interface GTagEventProps {
+	action: string;
+	category: string;
+	label: string;
+	value: number;
+}
+
 // https://developers.google.com/analytics/devguides/collection/gtagjs/events
-export const event = (
-	action: Gtag.EventNames,
-	{ event_category, event_label, value }: Gtag.EventParams
-) => {
+export const event = ({ action, category, label, value }: GTagEventProps) => {
 	window.gtag("event", action, {
-		event_category,
-		event_label,
+		event_category: category,
+		event_label: label,
 		value
 	});
-};
-
-// route가 변경될 때 gtag에서
-export const useGtag = () => {
-	const router = useRouter();
-
-	useEffect(() => {
-		const handleRouteChange = (url: URL) => {
-			pageview(url);
-		};
-
-		router.events.on("routeChangeComplete", handleRouteChange);
-		router.events.on("hashChangeComplete", handleRouteChange);
-		return () => {
-			router.events.off("routeChangeComplete", handleRouteChange);
-			router.events.off("hashChangeComplete", handleRouteChange);
-		};
-	}, [router.events]);
 };
