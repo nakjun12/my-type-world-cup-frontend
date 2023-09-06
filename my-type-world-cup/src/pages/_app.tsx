@@ -35,7 +35,7 @@ function App({ Component, pageProps }: AppProps) {
 					<MetaTags />
 					<script
 						async
-						src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+						src={`https://www.googletagmanager.com/gtag/js?id=G-2MHY2KXJCP`}
 					/>
 					<script
 						dangerouslySetInnerHTML={{
