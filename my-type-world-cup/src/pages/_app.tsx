@@ -4,7 +4,6 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import Script from "next/script";
 import { useEffect } from "react";
 import { RecoilRoot } from "recoil";
 import { SWRConfig } from "swr";
@@ -35,6 +34,10 @@ function App({ Component, pageProps }: AppProps) {
 					<link rel="mask-icon" href="/icon/trophy.svg" color="#000000" />
 					<MetaTags />
 					<script
+						async
+						src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
+					/>
+					<script
 						dangerouslySetInnerHTML={{
 							__html: `
               window.dataLayer = window.dataLayer || [];
@@ -48,10 +51,7 @@ function App({ Component, pageProps }: AppProps) {
 						}}
 					/>
 				</Head>
-				<Script
-					strategy="afterInteractive"
-					src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
-				/>
+
 				<div className="my-auto h-0 lg:h-auto mt-40 mr-4 hidden lg:block">
 					<p className="mt-4 text-2xl text-left">나의 마음을 확인하세요</p>
 					<h2 className="text-left text-5xl font-bold text-[#117FFA]">
