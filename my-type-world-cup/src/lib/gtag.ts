@@ -1,4 +1,4 @@
-import { GA_TRACKING_ID } from "../config";
+import { GA_TRACKING_ID } from "./config";
 // https://developers.google.com/analytics/devguides/collection/gtagjs/pages
 export const pageview = (url: URL) => {
 	if (typeof window.gtag == "undefined") return;

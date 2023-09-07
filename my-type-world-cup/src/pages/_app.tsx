@@ -1,4 +1,4 @@
-import MetaTags from "@/components/MetaTag";
+import MetaTags from "@/components/MetaTags";
 import Header from "@/components/all/Header";
 import { GA_TRACKING_ID } from "@/lib/config";
 import { usePageView } from "@/lib/hooks/usePageview";

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import * as gtag from "../gtag/gtag"; // 여기서 gtag는 위에서 정의한 Google Analytics 함수를 포함한 파일입니다.
+import * as gtag from "../gtag"; // 여기서 gtag는 위에서 정의한 Google Analytics 함수를 포함한 파일입니다.
 
 export const usePageView = () => {
 	const router = useRouter();
