@@ -1,16 +1,17 @@
 import { fetchUserData } from "@/api/user";
+import CardSkeleton from "@/components/main/CardSkeleton";
+import SearchBar from "@/components/main/SearchBar";
+import SortButtons from "@/components/main/SortButtons";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { accessTokenState, lastPath, userState } from "../lib/atom/atom";
-// const dummy =
-//   "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcm5hbWUiOiJ3bnM0NTBAZ21haWwuY29tIiwic3ViIjoid25zNDUwQGdtYWlsLmNvbSIsImlhdCI6MTY4OTM4MDAwMCwiZXhwIjoxNjg5MDAwMDAwfQ.Q-6tO2FQ6rQ8IXZD8jm6f7AN45fG_qpj0zqjD4-C2Yc";
 
-type Props = {};
-
-export default function Callback({}: Props) {
+export default function Callback() {
 	const [accessToken, setAccessToken] = useRecoilState(accessTokenState);
 	const [lastPathState, setlastPathState] = useRecoilState(lastPath);
+	const [forOnlyUI, setForOnlyUI] = useState<any>();
+
 	const router = useRouter();
 	const setUser = useSetRecoilState(userState);
 
@@ -35,8 +36,14 @@ export default function Callback({}: Props) {
 	}, [router.query.access_token, accessToken, setAccessToken]);
 
 	return (
-		<div className="mt-40 flex justify-center items-center">
-			<p>Loading...</p>
-		</div>
+		<main className="flex h-screen flex-col overflow-y-scroll relative pt-24">
+			<SearchBar setSearch={setForOnlyUI} />
+			<SortButtons setSort={setForOnlyUI} sort={forOnlyUI} />
+			<article className="w-full h-auto ">
+				{Array.from({ length: 10 }, (_, i) => (
+					<CardSkeleton key={i} />
+				))}
+			</article>
+		</main>
 	);
 }
