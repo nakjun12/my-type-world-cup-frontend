@@ -92,6 +92,8 @@ type Comment_list_data = {
 	worldCupId: number;
 };
 
+type SortValue = "playCount" | "createdAt" | "commentCount";
+
 type Comment_list_pageInfo = {
 	first: boolean;
 	page: number;
@@ -180,26 +182,32 @@ type Imgbb_result = {
 	success: boolean;
 };
 
-export type {
-  Candidate,
-  Comment_list,
-  Comment_list_data,
-  Comment_list_pageInfo,
-  Contestant,
-  Imgbb_result,
-  IngameModalData,
-  MainWorldcup,
-  PageInfo,
-  Post_req,
-  Post_res,
-  Rank_Data,
-  Rank_res,
-  Rank_res_data,
-  Rank_res_pageInfo,
-  Result_data,
-  Round,
-  Save_data,
-  Search_Image,
-  WorldcupsResponse
+type Sort_buttons = {
+	name: string;
+	value: SortValue;
 };
 
+export type {
+	Candidate,
+	Comment_list,
+	Comment_list_data,
+	Comment_list_pageInfo,
+	Contestant,
+	Imgbb_result,
+	IngameModalData,
+	MainWorldcup,
+	PageInfo,
+	Post_req,
+	Post_res,
+	Rank_Data,
+	Rank_res,
+	Rank_res_data,
+	Rank_res_pageInfo,
+	Result_data,
+	Round,
+	Save_data,
+	Search_Image,
+	SortValue,
+	Sort_buttons,
+	WorldcupsResponse
+};

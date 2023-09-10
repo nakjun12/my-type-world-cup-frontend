@@ -1,4 +1,5 @@
 import { fetcher, fetcherToken } from "@/api/swr_fetch";
+import type { SortValue } from "@/type/Types";
 import { MainWorldcup, WorldcupsResponse } from "@/type/Types";
 import {
 	Dispatch,
@@ -10,7 +11,6 @@ import {
 } from "react";
 import useSWRInfinite from "swr/infinite";
 import { BACK_URL } from "../config";
-export type SortValue = "playCount" | "createdAt" | "commentCount";
 
 type ReturnType = {
 	containerRef: RefObject<HTMLDivElement>;
