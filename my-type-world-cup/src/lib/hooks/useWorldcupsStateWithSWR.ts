@@ -6,7 +6,6 @@ import {
 	RefObject,
 	SetStateAction,
 	useEffect,
-	useMemo,
 	useRef,
 	useState
 } from "react";
@@ -40,9 +39,7 @@ const useWorldcupsStateWithSWR = (
 	const isReachingEnd = data && data[data.length - 1]?.data.length < 10;
 	const isLoading = !data && isValidating; // 로딩 상태를 나타내는 변수
 
-	const worldcups: MainWorldcup[] = useMemo(() => {
-		return data ? data.map((v) => v.data).flat() : [];
-	}, [data]);
+	const worldcups: MainWorldcup[] = data ? data.map((v) => v.data).flat() : [];
 
 	useEffect(() => {
 		const handleScroll = () => {
