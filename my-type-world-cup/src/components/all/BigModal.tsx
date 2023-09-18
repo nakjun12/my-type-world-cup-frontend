@@ -1,70 +1,64 @@
 import Image from "next/image";
 import loadingGif from "../../../public/icon/loading.gif";
+
+type BigModalProps = {
+	setIsMake?: React.Dispatch<React.SetStateAction<boolean>>;
+	setModalVisible: React.Dispatch<React.SetStateAction<boolean>>;
+	message: string;
+	modalVisible: boolean;
+	img: string;
+	uploadHandler: (image: string) => void;
+	loading: boolean;
+	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
 const BigModal = ({
 	message,
-	isCopied,
-	setIsCopied,
+	modalVisible,
+	setModalVisible,
 	setIsMake,
 	img,
 	uploadHandler,
 	loading,
 	setLoading
-}: {
-	setIsMake?: React.Dispatch<React.SetStateAction<boolean>>;
-	setIsCopied: React.Dispatch<React.SetStateAction<boolean>>;
-	message: string;
-	isCopied: boolean;
-	img: string;
-	uploadHandler: (image: string) => void;
-	loading: boolean;
-	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-}) => {
+}: BigModalProps) => {
+	const handleModalClose = () => {
+		if (!loading) setModalVisible(false);
+	};
+
 	return (
 		<div
-			className={
-				isCopied
-					? "absolute left-[0px] top-0 w-full h-full z-50 flex justify-center items-center pointer-events-auto"
-					: "absolute left-[0px] top-0 w-full h-full z-50 flex justify-center items-center pointer-events-none"
-			}>
+			className={`absolute left-[0px] top-0 w-full h-full z-50 flex justify-center items-center ${
+				modalVisible ? "pointer-events-auto" : "pointer-events-none"
+			}`}>
+			{/* 백그라운드 */}
 			<div
 				className="absolute w-full bg-black opacity-50"
 				style={{
-					opacity: isCopied ? 0.5 : 0,
+					opacity: modalVisible ? 0.5 : 0,
 					transition: "opacity 0.3s ease-out",
 					height: "calc(100% + 40px)"
 				}}
-				onClick={() => {
-					if (!loading) setIsCopied(false);
-				}}
+				onClick={handleModalClose}
 			/>
 
 			<div
 				className="fixed top-[25%] bg-main rounded-xl p-4 pt-6 z-50 flex justify-center items-center flex-col"
 				style={{
-					opacity: isCopied ? 1 : 0,
+					opacity: modalVisible ? 1 : 0,
 					transition: "opacity 0.3s ease-out"
 				}}>
-				{!!img && loading ? (
-					<>
-						<Image
-							src={loadingGif}
-							alt={"loading"}
-							width={200}
-							height={200}
-							className=""
-						/>
-					</>
-				) : (
-					<Image
-						src={img || loadingGif}
-						alt={`choiceImage`}
-						width={200}
-						height={200}
-						className="cursor-pointer"
-					/>
-				)}
+				{/* 로딩 이미지와 선택된 이미지 */}
+				<Image
+					src={loading ? loadingGif : img || loadingGif}
+					alt={loading ? "loading" : "choiceImage"}
+					width={200}
+					height={200}
+					className={loading ? "" : "cursor-pointer"}
+				/>
 				{!loading ? (
 					<>
+						{/* 업로드 여부 확인 버튼*/}
 						<p className="p-4 text-white">{message}</p>
 						<div className="flex gap-4 text-white">
 							<button
@@ -74,13 +68,14 @@ const BigModal = ({
 							</button>
 							<button
 								className=" hover:scale-125 hover:text-lightBlue"
-								onClick={() => setIsCopied(false)}>
+								onClick={() => setModalVisible(false)}>
 								아니오
 							</button>
 						</div>
 					</>
 				) : (
 					<>
+						{/* 고화질 사진 업로드 안내 메시지 */}
 						<p className="p-4 mt-8 text-white">
 							고화질 사진은 1~2분 소요됩니다
 						</p>
@@ -88,7 +83,7 @@ const BigModal = ({
 							<button
 								className=" hover:scale-125 hover:text-lightBlue"
 								onClick={() => {
-									setIsCopied(false);
+									setModalVisible(false);
 									setLoading(false);
 								}}>
 								나가기

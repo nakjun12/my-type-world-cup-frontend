@@ -23,7 +23,7 @@ export default function Index() {
 		providerType: ""
 	});
 	const accessToken = useRecoilValue(accessTokenState);
-	const { isCopied, setIsCopied, message, setMessageAndTimer } =
+	const { modalVisible, setModalVisible, message, setMessageAndTimer } =
 		useMessageAndTimer();
 	const router = useRouter();
 
@@ -118,8 +118,8 @@ export default function Index() {
 
 			<ShareModal
 				message={message}
-				isCopied={isCopied}
-				setIsCopied={setIsCopied}
+				modalVisible={modalVisible}
+				setModalVisible={setModalVisible}
 			/>
 		</>
 	);

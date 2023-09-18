@@ -76,7 +76,7 @@ export default function ImageEditor({
 	const scrollRef = useRef<HTMLDivElement>(null);
 	const [modalMessage, setModalMessage] =
 		useState<string>("이름을 작성해주세요");
-	const [isCopied, setIsCopied] = useState<boolean>(false);
+	const [modalVisible, setModalVisible] = useState<boolean>(false);
 
 	useEffect(() => {
 		setScale(1);
@@ -201,7 +201,7 @@ export default function ImageEditor({
 			});
 		} else {
 			setModalMessage("이름을 작성해주세요");
-			setIsCopied(!isCopied);
+			setModalVisible(!modalVisible);
 		}
 	}
 
@@ -367,8 +367,8 @@ export default function ImageEditor({
 
 			<BigModal
 				message="이미지를 선택하시겠습니까?"
-				isCopied={modal}
-				setIsCopied={setModal}
+				modalVisible={modal}
+				setModalVisible={setModal}
 				setLoading={setLoading}
 				img={img}
 				uploadHandler={uploadHandler}
@@ -377,8 +377,8 @@ export default function ImageEditor({
 			/>
 			<ShareModal
 				message={modalMessage}
-				isCopied={isCopied}
-				setIsCopied={setIsCopied}
+				modalVisible={modalVisible}
+				setModalVisible={setModalVisible}
 			/>
 		</div>
 	);
