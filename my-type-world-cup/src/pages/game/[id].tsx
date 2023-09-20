@@ -1,10 +1,9 @@
 import InGame from "@/components/game/InGame";
-import Modal from "@/components/game/InGameModal";
+import InGameModal from "@/components/game/InGameModal";
 import Result from "@/components/game/Result";
 import { getInitialRound } from "@/lib/Helper";
 import { BACK_URL } from "@/lib/config";
-import type { Round } from "@/type/Types";
-import { Contestant, IngameModalData } from "@/type/Types";
+import type { Contestant, IngameModalData, Round } from "@/type/Types";
 import { GetServerSideProps } from "next";
 import { useRef, useState } from "react";
 
@@ -56,7 +55,7 @@ const WorldCup = ({ data }: props) => {
         <div className="relative h-screen shadow-lg z-50">
           <div className="bg-sweetBlack w-full h-full overflow-hidden">
             {isModal[0] ? (
-              <Modal
+              <InGameModal
                 data={data}
                 init={init}
                 isModal={isModal}
@@ -108,3 +107,5 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   // 데이터 요청이 성공한 경우, data를 props로 반환합니다.
   return { props: { data } };
 };
+
+//다음부터는 default false로 잡고 시작하거나 하는 것은 true로 설정
