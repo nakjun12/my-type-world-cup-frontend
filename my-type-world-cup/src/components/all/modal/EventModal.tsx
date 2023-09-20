@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
-import loadingGif from "../../../public/icon/loading.gif";
+import loadingGif from "../../../../public/icon/loading.gif";
 
 type HandleDelete = () => void;
 
@@ -27,7 +27,7 @@ const EventModal = ({
 					: "fixed left-0 top-0 w-full h-full z-50 flex justify-center items-center pointer-events-none"
 			}>
 			<div
-				className="absolute w-full h-full bg-black opacity-50"
+				className='absolute w-full h-full bg-black opacity-50'
 				style={{
 					opacity: modalVisible ? 0.5 : 0,
 					transition: "opacity 0.3s ease-out"
@@ -38,7 +38,7 @@ const EventModal = ({
 			/>
 
 			<div
-				className="fixed top-[25%] bg-main rounded-xl p-4 pt-6 z-50 flex justify-center items-center flex-col"
+				className='fixed top-[25%] bg-main rounded-xl p-4 pt-6 z-50 flex justify-center items-center flex-col'
 				style={{
 					opacity: modalVisible ? 1 : 0,
 					transition: "opacity 0s"
@@ -49,20 +49,20 @@ const EventModal = ({
 						alt={`choiceImage`}
 						width={200}
 						height={200}
-						className="cursor-pointer"
+						className='cursor-pointer'
 					/>
 				}
 				{
 					<>
-						<p className="p-4 text-white">{message}</p>
-						<div className="flex gap-4 text-white">
+						<p className='p-4 text-white'>{message}</p>
+						<div className='flex gap-4 text-white'>
 							<button
-								className=" hover:scale-125 hover:text-lightBlue"
+								className=' hover:scale-125 hover:text-lightBlue'
 								onClick={() => handleDelete()}>
 								예
 							</button>
 							<button
-								className=" hover:scale-125 hover:text-lightBlue"
+								className=' hover:scale-125 hover:text-lightBlue'
 								onClick={() => setModalVisible(false)}>
 								아니오
 							</button>

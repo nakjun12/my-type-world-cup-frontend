@@ -8,8 +8,8 @@ import type {
   Comment_list_data,
   Comment_list_pageInfo
 } from "../../../type/Types";
-import { Comment } from "../Comment";
 import ShareModal from "../modal/ShareModal";
+import { Comment } from "./Comment";
 
 type Props = {
   accessToken: string | null;
