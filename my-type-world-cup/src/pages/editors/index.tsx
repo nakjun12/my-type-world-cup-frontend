@@ -10,7 +10,7 @@ import { useRecoilValue } from "recoil";
 const WorldCupEditor = () => {
   const saveWorldcup = useRecoilValue<Post_res | null>(postWorldcup);
   const accessToken = useRecoilValue<string | null>(accessTokenState);
-  const [isNumber, setIsNumber] = useState<Editor_step>("1");
+  const [isNumber, setIsNumber] = useState<Editor_step>(1);
   const router = useRouter();
 
   useEffect(() => {
@@ -21,9 +21,9 @@ const WorldCupEditor = () => {
 
   const content = (() => {
     switch (isNumber) {
-      case "1":
+      case 1:
         return <Editor setIsNumber={setIsNumber} />;
-      case "2":
+      case 2:
         return (
           <ImageUpload
             accessToken={accessToken}
@@ -34,7 +34,7 @@ const WorldCupEditor = () => {
     }
   })();
   return (
-    <div className="pt-12 relative">
+    <div className="pt-12 relative min-h-screen">
       <TabButtons isNumber={isNumber} setIsNumber={setIsNumber} />
       {content}
     </div>

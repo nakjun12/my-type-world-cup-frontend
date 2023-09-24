@@ -26,7 +26,9 @@ const Editor = ({ setIsNumber }: EditorProps) => {
     password,
     setPassword,
     isValid,
-    setIsValid
+    setIsValid,
+    errorMessage,
+    setErrorMessage
   } = useEditorState(worldcup);
 
   const { handleSave, handleReset, handlePublicChange, handlePasswordChange } =
@@ -43,12 +45,13 @@ const Editor = ({ setIsNumber }: EditorProps) => {
       title,
       description,
       isPublic,
-      password
+      password,
+      setErrorMessage
     });
 
   return (
     <div
-      className="sm:pt-20 mt-4 sm:mt-8 mx-8 text-lg flex flex-col min-h-screen"
+      className="sm:pt-20 mt-4 sm:mt-8 mx-8 text-lg flex flex-col"
       // onSubmit={handleSubmit}
     >
       <EditorTitleInput title={title} setTitle={setTitle} />
@@ -67,6 +70,9 @@ const Editor = ({ setIsNumber }: EditorProps) => {
       )}
 
       <VisibilityRadioGroup isPublic={isPublic} onChange={handlePublicChange} />
+      <div className="mt-20 text-error text-sm mb-1">
+        {!isValid && <p>{errorMessage}</p>}
+      </div>
       <SaveResetButtons onSave={handleSave} onReset={handleReset} />
     </div>
   );

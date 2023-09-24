@@ -26,7 +26,6 @@ export default function ImageUpload({
   setIsNumber,
   accessToken
 }: Props) {
-  console.log(saveWorldcup, "saveWorldcup");
   const [search, setSearch] = useState<string>("");
   const [imgSrc, setImgSrc] = useState("");
   const router = useRouter();
@@ -35,29 +34,28 @@ export default function ImageUpload({
   const [isMake, setIsMake] = useState<boolean>(false);
   const [candidateId, setCandidateId] = useState<number>(0);
   const keyword = search.slice(1);
-  const { data, mutate, size, setSize, isValidating, isLoading } =
-    useSWRInfinite<Search_Image>(
-      (index) => {
-        // keyword가 비어 있으면 빈 문자열 반환
-        if (!keyword) {
-          return "";
-        }
-        return `${BACK_URL}/images?${keyword}&page=${index + 1}&size=20`;
-      },
-      (url: string) => fetcherToken(url, accessToken)
-    );
-  console.log(saveList, "saveList");
+  const { data, setSize } = useSWRInfinite<Search_Image>(
+    (index) => {
+      // keyword가 비어 있으면 빈 문자열 반환
+      if (!keyword) {
+        return "";
+      }
+      return `${BACK_URL}/images?${keyword}&page=${index + 1}&size=20`;
+    },
+    (url: string) => fetcherToken(url, accessToken)
+  );
+
   const searchData: string[] = data ? data.map((v) => v.data).flat() : [];
+
   useEffect(() => {
     setSize(1);
-  }, [keyword, setSize]);
+  }, [keyword]);
 
   useEffect(() => {
     if (!saveWorldcup) {
-      setIsNumber("1");
+      setIsNumber(1);
     }
-    // deleteImage("https://ibb.co/FVM8BWM/8a86410147f09597e85d2dd8f5e60e2a");
-  }, [saveWorldcup, setIsNumber]);
+  }, []);
 
   function onSelectFile(e: ChangeEvent<HTMLInputElement>) {
     if (e.target.files && e.target.files.length > 0) {
@@ -74,13 +72,15 @@ export default function ImageUpload({
   const handleMyWorldCup = () => {
     router.push(`/myworldcup`);
   };
+
   if (!saveWorldcup) {
     return <></>;
   }
+
   return (
     <>
       {!isMake ? (
-        <section className="flex flex-col mx-8 text-lg min-h-screen">
+        <section className="flex flex-col mx-8 text-lg">
           <h1 className="mt-8 sm:mt-12 mb-0 sm:mb-2 sm:text-xl  py-4 font-bold">
             후보 목록
           </h1>
