@@ -1,11 +1,11 @@
 import TabButtons from "@/components/editor/TabButton";
+import CandidateManagement from "@/components/editor/candidateManagementPanel/CandidateManagement";
 import WorldcupEditor from "@/components/editor/worldcupEditorPanel/WorldcupEditor";
 import { accessTokenState, postWorldcup } from "@/lib/atom/atom";
 import type { Editor_step, Post_res } from "@/type/Types";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
-import CandidateManagement from "../../components/editor/candidateManagementPanel/CandidateManagement";
 
 const WorldCupEditor = () => {
   const saveWorldcup = useRecoilValue<Post_res | null>(postWorldcup);
