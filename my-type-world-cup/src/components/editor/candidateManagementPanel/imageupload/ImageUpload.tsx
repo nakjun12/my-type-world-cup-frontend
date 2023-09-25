@@ -2,8 +2,8 @@
 import SearchBar from "@/components/main/SearchBar";
 import type { Post_res } from "@/type/Types";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import SearchImages from "../SearchImages";
 import ImageEditor from "./ImageEditor";
+import SearchImages from "./SearchImages";
 
 interface ImageUploadProps {
   accessToken: string | null;
