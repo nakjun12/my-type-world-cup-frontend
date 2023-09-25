@@ -1,5 +1,5 @@
 import TabButtons from "@/components/editor/TabButton";
-import CandidateManagement from "@/components/editor/candidateManagementPanel/CandidateManagement";
+import CandidateManagement from "@/components/editor/candidateManagementPanel/Management";
 import WorldcupEditor from "@/components/editor/worldcupEditorPanel/WorldcupEditor";
 import { accessTokenState, postWorldcup } from "@/lib/atom/atom";
 import type { Editor_step, Post_res } from "@/type/Types";
