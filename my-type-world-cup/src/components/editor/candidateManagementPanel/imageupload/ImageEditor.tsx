@@ -1,25 +1,11 @@
 import { post_candidates } from "@/api/user";
 import { blobToServer } from "@/lib/editor/base64";
+import useImageEditorState from "@/lib/hooks/useImageEditorState";
 import type { Imgbb_result, Save_data } from "@/type/Types";
 import Image from "next/image";
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  SyntheticEvent,
-  useEffect,
-  useRef,
-  useState
-} from "react";
-import ReactCrop, {
-  Crop,
-  PixelCrop,
-  centerCrop,
-  makeAspectCrop
-} from "react-image-crop";
+import { Dispatch, SetStateAction, SyntheticEvent } from "react";
+import ReactCrop, { centerCrop, makeAspectCrop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
-import { canvasPreview } from "../../../../lib/editor/canvasPreview";
-import { useDebounceEffect } from "../../../../lib/editor/useDebounceEffect";
 import BigModal from "../../../all/modal/BigModal";
 import ShareModal from "../../../all/modal/ShareModal";
 // 이것은 % 비율의 aspect crop을 만들고 중앙 정렬하는 방법을 보여주기 위한 것입니다.
@@ -67,59 +53,39 @@ export default function ImageEditor({
   accessToken,
   setCandidateId
 }: Props) {
-  // const [imgSrc, setImgSrc] = useState("");
-  const [modal, setModal] = useState<boolean>(false);
-  const [img, setImg] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
-  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
-  const imgRef = useRef<HTMLImageElement>(null);
-  const hiddenAnchorRef = useRef<HTMLAnchorElement>(null);
-  const nameRef = useRef<HTMLInputElement>(null);
-  const blobUrlRef = useRef("");
-  const [crop, setCrop] = useState<Crop>();
-  const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
-  const [scale, setScale] = useState(1);
-  const [rotate, setRotate] = useState(0);
-  const [aspect, setAspect] = useState<number | undefined>(1 / 1);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const [modalMessage, setModalMessage] =
-    useState<string>("이름을 작성해주세요");
-  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const {
+    modal,
+    setModal,
+    img,
+    setImg,
+    loading,
+    setLoading,
+    crop,
+    setCrop,
+    completedCrop,
+    setCompletedCrop,
+    scale,
+    setScale,
+    rotate,
+    setRotate,
+    aspect,
+    setAspect,
+    previewCanvasRef,
+    imgRef,
+    blobUrlRef,
+    hiddenAnchorRef,
+    nameRef,
+    modalMessage,
+    setModalMessage,
+    modalVisible,
+    setModalVisible,
+    scrollRef
+  } = useImageEditorState({ imgSrc });
 
-  useEffect(() => {
-    setScale(1);
-    setRotate(0);
-    setCrop(undefined);
-    if (scrollRef.current) {
-      scrollRef.current.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
-    }
-  }, [imgSrc]);
-  //파일 읽음
-  // function onSelectFile(e: ChangeEvent<HTMLInputElement>) {
-  //   if (e.target.files && e.target.files.length > 0) {
-  //     // console.log(e.target.files);
-  //     // setCrop(undefined); //이미지 간 자르기 미리보기를 업데이트합니다
-  //     const reader = new FileReader();
-  //     reader.readAsDataURL(e.target.files[0]);
-  //     reader.addEventListener("load", () => {
-  //       setImgSrc(reader.result?.toString() || "");
-  //     });
-  //   }
-  // }
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const name = nameRef.current?.value;
-
-    // 여기에서 이름을 처리하거나 다른 작업을 수행합니다.
-  };
   //이미지 로드
   function onImageLoad(e: SyntheticEvent<HTMLImageElement>) {
     if (aspect) {
       const { width, height } = e.currentTarget;
-
       setCrop(centerAspectCrop(width, height, aspect));
     }
   }
@@ -127,19 +93,12 @@ export default function ImageEditor({
   const uploadHandler = async (image: string) => {
     //최종 저장
     try {
-      setLoading((el) => !el);
-      // await fetch(image)
-      //   .then((response) => response.blob())
-      //   .then((blob) => {
-      //     // Use the image blob as needed
-      //     console.log(blob);
-      //     // Further processing with the blob (e.g., display or save)
-      //   })
-      //   .catch((error) => {
-      //     console.error("Error fetching image:", error);
-      //   });
+      setLoading(true); // 로딩 상태 시작
+
+      if (!accessToken) throw new Error("accessToken is null");
 
       const response: Imgbb_result = await blobToServer(image);
+
       const data: Save_data = {
         name: nameRef.current?.value || "익명",
         image: response.data.image.url,
@@ -147,93 +106,67 @@ export default function ImageEditor({
         worldCupId: id || 0,
         id: candidateId
       };
-      console.log(data, "간다");
-      if (!accessToken) throw new Error("accessToken is null");
 
-      post_candidates(accessToken, data)
-        .then((res: Save_data) => {
-          const save = {
-            ...res
-          };
-          console.log(save, "성공"); //수정해야함
+      // 데이터 저장
+      const res: Save_data = await post_candidates(accessToken, data);
 
-          setImgSrc("");
+      console.log(res, "저장 성공");
 
-          if (nameRef.current) {
-            nameRef.current.value = ""; // 값 초기화
-          }
-          setCandidateId(0);
-          setIsMake(false);
-        })
-        .catch((err) => {
-          console.log(err, "실패");
-          // if (err === 401) {
-          //   console.log(accessToken);
-          //   post_refresh();
-          //   console.log("로그인 해야해~");
-          // }
-        });
+      setImgSrc("");
+      if (nameRef.current) {
+        nameRef.current.value = ""; // 값 초기화
+      }
 
-      //tumbㄷ 추가
-      const name = nameRef.current?.value;
-
-      setModal(!modal); //모달 제거
-      setLoading((el) => !el);
+      setCandidateId(0);
+      setIsMake(false);
+      setModal(false); // 모달 제거
     } catch (error) {
-      // 에러 처리를 위한 로직 추가
-      console.error(error);
+      console.error(error); // 에러 처리
+    } finally {
+      setLoading(false); // 로딩 상태 종료
     }
   };
 
+  //자른 사진 최종 업데이트 함수
   function onDownloadCropClick() {
-    //저장하기 버튼
-    if (nameRef.current?.value !== "") {
-      if (!previewCanvasRef.current) {
-        throw new Error("Crop canvas does not exist");
-      }
+    const nameValue = nameRef.current?.value;
+    const previewCanvas = previewCanvasRef.current;
 
-      previewCanvasRef.current.toBlob((blob) => {
-        if (!blob) {
-          throw new Error("Failed to create blob");
-        }
-        if (blobUrlRef.current) {
-          URL.revokeObjectURL(blobUrlRef.current);
-        }
-        blobUrlRef.current = URL.createObjectURL(blob);
-        setImg(blobUrlRef.current);
-        setModal(!modal);
-        // setSaveList((prev) => [blobUrlRef.current, ...prev]); //convert할 것
-        // hiddenAnchorRef.current!.href = blobUrlRef.current;
-        // hiddenAnchorRef.current!.click();
-        // console.log(blobUrlRef.current);
-      });
-    } else {
+    // 이름이 없을 경우
+    if (!nameValue) {
       setModalMessage("이름을 작성해주세요");
-      setModalVisible(!modalVisible);
+      setModalVisible(true);
+      return;
     }
-  }
 
-  useDebounceEffect(
-    async () => {
-      if (
-        completedCrop?.width &&
-        completedCrop?.height &&
-        imgRef.current &&
-        previewCanvasRef.current
-      ) {
-        // We use canvasPreview as it's much faster than imgPreview.
-        canvasPreview(
-          imgRef.current,
-          previewCanvasRef.current,
-          completedCrop,
-          scale,
-          rotate
-        );
+    // previewCanvas가 없을 경우
+    if (!previewCanvas) {
+      // 여기서는 에러를 던지기보다 사용자에게 알려줄 수 있는 다른 방법을 고려해보세요.
+      console.error("Crop canvas does not exist");
+      return;
+    }
+
+    // Blob 생성
+    previewCanvas.toBlob((blob) => {
+      if (!blob) {
+        // Blob 생성 실패
+        console.error("Failed to create blob");
+        return;
       }
-    },
-    100,
-    [completedCrop, scale, rotate]
-  );
+
+      // 이전 Blob URL 해제
+      if (blobUrlRef.current) {
+        URL.revokeObjectURL(blobUrlRef.current);
+      }
+
+      // 새 Blob URL 생성
+      blobUrlRef.current = URL.createObjectURL(blob);
+
+      // 상태 업데이트
+      setImg(blobUrlRef.current);
+      setModal(!modal);
+    });
+  }
 
   return (
     <div className="mt-4 mb-4">

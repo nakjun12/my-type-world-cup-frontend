@@ -1,5 +1,6 @@
 import { DependencyList, useEffect } from "react";
 
+//디바운스 훅
 export function useDebounceEffect(
   fn: () => void,
   waitTime: number,
