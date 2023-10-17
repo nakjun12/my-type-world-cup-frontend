@@ -75,7 +75,7 @@ export const CandidateCard = ({
         height={imageDimensions}
         priority
         className={`cursor-pointer sm:hover:scale-105 duration-300 ${
-          loadHighQuality[pickNum] ? "" : "hidden"
+         loadHighQuality[pickNum] ? "" : "hidden"
         }`}
         onLoadingComplete={() => {
           setLoadHighQuality((prev) => {
@@ -95,7 +95,7 @@ export const CandidateCard = ({
         height={imageDimensions}
         priority
         className={`cursor-pointer sm:hover:scale-105 duration-300 ${
-          loadHighQuality[pickNum] ? "hidden" : ""
+          !imageLoadedFlag||loadHighQuality[pickNum] ? "hidden" : ""
         }`}
         onLoadingComplete={() => handleImageLoad(pickNum)}
       />
