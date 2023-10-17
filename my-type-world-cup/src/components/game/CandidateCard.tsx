@@ -2,7 +2,7 @@
 import type { Contestant } from "@/type/Types";
 import Image from "next/image";
 import type { CSSProperties, Dispatch, SetStateAction } from "react";
-import loadingGif from "../../../../public/icon/loading.gif";
+import loadingGif from "../../../public/icon/loading.gif";
 
 interface CandidateCardProps {
   pickNum: number;
