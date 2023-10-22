@@ -32,6 +32,7 @@ const ImageUpload = ({
   setSearch,
   saveWorldcup
 }: ImageUploadProps) => {
+  // 로컬 파일 업로드
   async function onSelectFile(e: ChangeEvent<HTMLInputElement>) {
     if (!e.target.files || e.target.files.length === 0) return;
 
@@ -50,6 +51,7 @@ const ImageUpload = ({
   return (
     <section className=" flex flex-col mx-8 text-lg mb-4 ">
       <h1 className="mt-10 sm:text-xl">사진 업로드</h1>
+      {/*로컬 업로드*/}
       <input type="file" onChange={onSelectFile} className="mt-8 mb-4" />
       <div className="flex justify-between">
         <div className="flex w-full   mt-4 sm:mt-8 p-2">
@@ -59,6 +61,7 @@ const ImageUpload = ({
       <div className=" mb-4 p-2">
         <SearchBar setSearch={setSearch} />
       </div>
+      {/*이미지 검색을 통한 업로드*/}
       <SearchImages
         data={searchData ? searchData : null}
         setSize={setSize}
